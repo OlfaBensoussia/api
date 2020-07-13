@@ -1,4 +1,4 @@
-module github.com/OlfaBensoussia/mock-back-end
+module github.com/OlfaBensoussia/softcoded_api
 
 go 1.14
 
