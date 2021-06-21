@@ -9,7 +9,7 @@ type Task struct {
 
 var Tasks []Task
 
-func initMockTasks() {
+func InitMockTasks() {
 	Tasks = []Task{
 		Task{Id: "1", Title: "task 1", Desc: "Task Description"},
 		Task{Id: "2", Title: "task 2", Desc: "Task Description"},

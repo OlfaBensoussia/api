@@ -1,6 +1,14 @@
 package main
 
+import (
+	"fmt"
+
+	"github.com/OlfaBensoussia/api/models"
+	"github.com/OlfaBensoussia/api/routes"
+)
+
 func main() {
-	routes.handleRequests()
-	models.initMockTasks()
+	models.InitMockTasks()
+	routes.HandleRequests()
+	fmt.Println("app is running ")
 }

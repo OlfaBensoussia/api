@@ -7,63 +7,62 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/OlfaBensoussia/api/models"
+
 	"github.com/gorilla/mux"
 )
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "This is the home page!")
-	fmt.Println("Endpoint Hit: home Page")
+func HomePage(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Endpoint Hit: home Page !")
 }
 
-func getAllTasks(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(w, "Endpoint Hit: return all Tasks")
-	json.NewEncoder(w).Encode(Tasks)
+func GetAllTasks(w http.ResponseWriter, r *http.Request) {
+	json.NewEncoder(w).Encode(models.Tasks)
 }
 
-func getTask(w http.ResponseWriter, r *http.Request) {
+func GetTask(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["id"]
-	for _, Task := range Tasks {
+	for _, Task := range models.Tasks {
 		if Task.Id == key {
 			json.NewEncoder(w).Encode(Task)
+			break
 		}
+		return
 	}
+	json.NewEncoder(w).Encode(&models.Task{})
 }
 
-func createTask(w http.ResponseWriter, r *http.Request) {
+func CreateTask(w http.ResponseWriter, r *http.Request) {
 	// get the body of our POST request and unmarshal it into a new Task struct
-	reqBody, _ := ioutil.ReadAll(r.Body)
-	// _ = json.NewDecoder(r.Body).Decode(&task)
-	var task Task
-	json.Unmarshal(reqBody, &task)
-	task.Id = strconv.Itoa(len(Tasks) + 1)
-	// update our global Tasks array to include our new Task
-	Tasks = append(Tasks, task)
-	json.NewEncoder(w).Encode(task)
+	task := models.Task{}
+	_ = json.NewDecoder(r.Body).Decode(&task)
+	task.Id = strconv.Itoa(len(models.Tasks) + 1)
+	// update our global models.Tasks array to include our new Task
+	models.Tasks = append(models.Tasks, task)
+	json.NewEncoder(w).Encode(&task)
 
 }
 
-func updateTask(w http.ResponseWriter, r *http.Request) {
+func UpdateTask(w http.ResponseWriter, r *http.Request) {
 	// get the body of our POST request and unmarshal it into a new Task struct
 	reqBody, _ := ioutil.ReadAll(r.Body)
-	var newTask Task
+	newTask := models.Task{}
 	json.Unmarshal(reqBody, &newTask)
 	key := newTask.Id
-	for index, Task := range Tasks {
+	for index, Task := range models.Tasks {
 		if Task.Id == key {
-			Tasks[index] = newTask
-			// Tasks[index].Title = newTask.Title
-			// Tasks[index].Desc = newTask.Desc
+			models.Tasks[index] = newTask
 		}
 	}
 }
 
-func deleteTask(w http.ResponseWriter, r *http.Request) {
+func DeleteTask(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	for index, Task := range Tasks {
+	for index, Task := range models.Tasks {
 		if Task.Id == id {
-			Tasks = append(Tasks[:index], Tasks[index+1:]...)
+			models.Tasks = append(models.Tasks[:index], models.Tasks[index+1:]...)
 			break
 		}
 	}

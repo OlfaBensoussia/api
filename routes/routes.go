@@ -3,19 +3,18 @@ package routes
 import (
 	"log"
 	"net/http"
-	"github.com/OlfaBensoussia/mock-back-end/models"
 
+	"github.com/OlfaBensoussia/api/controllers"
 	"github.com/gorilla/mux"
 )
 
-func handleRequests() {
-	task := models.Task{}
+func HandleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
-	myRouter.HandleFunc("/", task.homePage())
-	myRouter.HandleFunc("/tasks", task.getAllTasks())
-	myRouter.HandleFunc("/task/{id}", task.getTask()).Methods("GET")
-	myRouter.HandleFunc("/tasks", task.createTask()).Methods("POST")
-	myRouter.HandleFunc("/task/{id}", task.updateTask()).Methods("PUT")
-	myRouter.HandleFunc("/task/{id}", task.deleteTask()).Methods("DELETE")
+	myRouter.HandleFunc("/", controllers.HomePage)
+	myRouter.HandleFunc("/tasks", controllers.GetAllTasks).Methods("GET")
+	myRouter.HandleFunc("/task/{id}", controllers.GetTask).Methods("GET")
+	myRouter.HandleFunc("/tasks", controllers.CreateTask).Methods("POST")
+	myRouter.HandleFunc("/task/{id}", controllers.UpdateTask).Methods("PUT")
+	myRouter.HandleFunc("/task/{id}", controllers.DeleteTask).Methods("DELETE")
 	log.Fatal(http.ListenAndServe(":8080", myRouter))
 }

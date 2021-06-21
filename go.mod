@@ -1,4 +1,4 @@
-module github.com/OlfaBensoussia/softcoded_api
+module github.com/OlfaBensoussia/api
 
 go 1.14
 
